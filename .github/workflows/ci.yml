@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        compiler:
+          - gcc-11
+        build_type:
+          - Debug
+          #- Release
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install compiler
+      id: install_cxx
+      working-directory: ${{github.workspace}}
+      shell: bash
+      run: bash .github/workflows/compiler-setup.sh "${{ runner.os }}" "${{ matrix.compiler }}"
+
+    - name: Check compiler
+      shell: bash
+      env:
+        CXX: ${{ steps.install_cxx.outputs.cxx }}
+        CC: ${{ steps.install_cxx.outputs.cc }}
+      run: |
+        $CXX --version
+        $CC --version
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install python dependencies
+      run: python -m pip install --upgrade pip setuptools wheel
+
+    - name: Install setup tools
+      run: pip3 install wheel setuptools
+      shell: bash
+
+    - name: Install conan latest
+      if: ${{ inputs.version == '' }}
+      shell: bash
+      run: pip3 install conan --upgrade   
+
+    - name: Build
+      working-directory: ${{github.workspace}}
+      # Build program with the given configuration
+      run: bash build.sh -d -v -compiler "${{ matrix.compiler }}" -cxx ${{ steps.install_cxx.outputs.cxx }} -cc ${{ steps.install_cxx.outputs.cc }}
+
+    - name: Test
+      working-directory: ${{github.workspace}}
+      # Execute tests defined by the script
+      run: bash test.sh -a

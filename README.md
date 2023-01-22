@@ -1,4 +1,4 @@
-# C++ Starter Project
+# Data Structures implemented in C++ 
 
 [![ci](https://github.com/krogk/cpp-data-structures/actions/workflows/ci.yml/badge.svg)](https://github.com/krogk/cpp-data-structures/actions/workflows/ci.yml)
 
@@ -13,6 +13,7 @@ Most of the data structures are implemented by the std(standard library), howeve
 C++ STD(standard library) implements several data structures as containers, the container is defined as "an object used to store other objects and taking care of the management of the memory used by the objects it contains" these implementations have several requirements, and are data type agnostic. Containers are categorized in following fashion:
 
 #### Sequence containers
+
 * [std::array](https://en.cppreference.com/w/cpp/container/array) - Static sized array, allocated on the stack memory
 * [std::vector](https://en.cppreference.com/w/cpp/container/vector) - Dynamic sized array, allocated on the heap
 * [std::deque](https://en.cppreference.com/w/cpp/container/deque) -  Double ended queue, 
@@ -52,9 +53,9 @@ Trees:
 Although the ordered associative containers are based on tree, there is no template for tree like structures.
 
 Common tree data structures include:
-* [] Binary Tree
-* [] Max Heap
-* [] Min Heap
+* [x] Binary Tree
+* [x] Max Heap
+* [x] Min Heap
 * [] Abstract syntax tree (AST)
 
 Self-balancing trees:
